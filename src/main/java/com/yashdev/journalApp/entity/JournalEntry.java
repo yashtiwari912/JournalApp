@@ -1,6 +1,9 @@
 package com.yashdev.journalApp.entity;
 
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,6 +13,9 @@ import java.util.Date;
 
 @Document(collection = "journal_entries")// This annotation is used to indicate that this class is a MongoDB document
 //agar collection nhi dala to class name se collection create ho jayegi by default
+//@Getter
+//@Setter
+@Data
 public class JournalEntry {
 
     @Id // This annotation is used to mark the field as the primary key in MongoDB
@@ -21,36 +27,5 @@ public class JournalEntry {
 
     private LocalDateTime date;
 
-    public LocalDateTime getDate() {
-        return date;
-    }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }
