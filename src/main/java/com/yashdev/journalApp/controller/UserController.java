@@ -3,12 +3,15 @@ package com.yashdev.journalApp.controller;
 
 import com.yashdev.journalApp.entity.JournalEntry;
 import com.yashdev.journalApp.entity.User;
+import com.yashdev.journalApp.repository.UserRepository;
 import com.yashdev.journalApp.services.JournalEntryService;
 import com.yashdev.journalApp.services.UserService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -29,40 +32,56 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
-    public List<User> getAllUser(){
-        return userService.getAll();
-    }
+    @Autowired
+    private UserRepository userRepository;
 
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
-        try {
-            userService.saveEntry(user);
-            return new ResponseEntity<>(user, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @GetMapping
+//    public List<User> getAllUser(){
+//        return userService.getAll();
+//    }
 
-    @PutMapping("/{userName}")
-    public ResponseEntity<?>updateUser(@RequestBody User user,@PathVariable String userName){
+    //Moved to PublicController as we want to allow anyone to create an account without authentication
+//    @PostMapping
+//    public ResponseEntity<User> createUser(@RequestBody User user){
+//        try {
+//            //userService.saveEntry(user);
+//            userService.saveNewUser(user);
+//            return new ResponseEntity<>(user, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+    @PutMapping
+    public ResponseEntity<?>updateUser(@RequestBody User user){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();//get the currently authenticated user
+        String userName = authentication.getName();
         User userInDb = userService.findByUserName(userName);
-        if(userInDb != null){
+
             userInDb.setUserName(user.getUserName());
             userInDb.setPassword(user.getPassword());
-            userService.saveEntry(userInDb);
+            //userService.saveEntry(userInDb);
+            userService.saveNewUser(userInDb);
             return new ResponseEntity<>(userInDb, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
-    @DeleteMapping("Userid/{id}")
-    public ResponseEntity<?> deleteUserById(@PathVariable ObjectId id){
-        Optional<User>user = userService.getUserByID(id);
-        if(user.isPresent()){
-            userService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+
+//    @DeleteMapping("Userid/{id}")
+//    public ResponseEntity<?> deleteUserById(@PathVariable ObjectId id){
+//        Optional<User>user = userService.getUserByID(id);
+//        if(user.isPresent()){
+//            userService.deleteById(id);
+//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//        }
+//        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUserById(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        userRepository.deleteByUserName(authentication.getName());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

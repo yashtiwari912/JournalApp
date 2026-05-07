@@ -24,12 +24,20 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
-    @Transactional
+    //@Transactional
     public void saveEntry(JournalEntry journalEntry, String userName) {
+        //System.out.println("userName = '" + userName + "'");
+
         User user = userService.findByUserName(userName);
+
+        //System.out.println("user: "+ user);
+
         JournalEntry saved = journalEntryRepository.save(journalEntry);
+
         user.getJournalEntries().add(saved);
+
         userService.saveEntry(user);
+
     }
     public void saveEntry(JournalEntry journalEntry) {
         journalEntryRepository.save(journalEntry);//as currently we have not implemented auth
@@ -40,11 +48,23 @@ public class JournalEntryService {
     public Optional<JournalEntry> getJournalEntryByID(ObjectId id){
         return journalEntryRepository.findById(id);
     }
-    public void deleteById(ObjectId id, String userName){
-        User user = userService.findByUserName(userName);
-        user.getJournalEntries().removeIf(x -> x.getId().equals(id));
-        userService.saveEntry(user);
-        journalEntryRepository.deleteById(id);
+    //@Transactional
+    public boolean deleteById(ObjectId id, String userName){
+        boolean removed = false;
+        try {
+            User user = userService.findByUserName(userName);
+            removed = user.getJournalEntries().removeIf(x -> x.getId().equals(id));
+            if(removed){
+                userService.saveEntry(user);
+                journalEntryRepository.deleteById(id);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return removed;
+
+
+
     }
 
 }
