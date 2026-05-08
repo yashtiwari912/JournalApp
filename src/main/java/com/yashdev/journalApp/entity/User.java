@@ -1,6 +1,7 @@
   package com.yashdev.journalApp.entity;
 
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
@@ -13,8 +14,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-  @Document(collection = "users")
+
+@Document(collection = "users")
 @Data
+@Builder
 public class User {
 
     @Id

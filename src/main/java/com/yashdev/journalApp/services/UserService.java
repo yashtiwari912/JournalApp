@@ -28,12 +28,18 @@ public class UserService {
     public void saveEntry(User user) {
         userRepository.save(user);
     }
-    public void saveNewUser(User user) {
+    public boolean saveNewUser(User user) {
         // Hash the password before saving
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(hashedPassword);
-        user.setRoles(Arrays.asList("USER"));// Set default role as USER
-        userRepository.save(user);
+        try {
+            String hashedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(hashedPassword);
+            user.setRoles(Arrays.asList("USER"));// Set default role as USER
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     public void saveAdminUser(User user){
