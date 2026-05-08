@@ -35,6 +35,14 @@ public class UserService {
         user.setRoles(Arrays.asList("USER"));// Set default role as USER
         userRepository.save(user);
     }
+
+    public void saveAdminUser(User user){
+        // Hash the password before saving
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+        user.setRoles(Arrays.asList("USER","ADMIN"));// Set default role as USER
+        userRepository.save(user);
+    }
     public List<User>getAll(){
         return userRepository.findAll();
     }

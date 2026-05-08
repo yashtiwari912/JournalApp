@@ -1,5 +1,6 @@
 package com.yashdev.journalApp.config;
 import com.yashdev.journalApp.services.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,11 +14,16 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SpringSecurity {
 
-    private final UserDetailsServiceImpl userDetailsService;
 
-    public SpringSecurity(UserDetailsServiceImpl userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+
+
+//    private final UserDetailsServiceImpl userDetailsService;
+//
+//    public SpringSecurity(UserDetailsServiceImpl userDetailsService) {
+//        this.userDetailsService = userDetailsService;
+//    }
 
     // Password encoder
     @Bean
@@ -41,6 +47,7 @@ public class SpringSecurity {
                 .authorizeHttpRequests(request -> request
                         //.requestMatchers("/journal/**", "/user/**").authenticated()
                         .requestMatchers("/journal/**" , "/user/**").authenticated() // Only journal endpoints require authentication
+                        .requestMatchers("/admin/**").hasRole("ADMIN")// Only admin endpoints require ADMIN role
                         .anyRequest().permitAll()
                 )
                 .authenticationProvider(authenticationProvider()) //  IMPORTANT

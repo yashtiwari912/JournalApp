@@ -1,6 +1,4 @@
 package com.yashdev.journalApp.controller;
-
-
 import com.yashdev.journalApp.entity.JournalEntry;
 import com.yashdev.journalApp.entity.User;
 import com.yashdev.journalApp.services.JournalEntryService;
