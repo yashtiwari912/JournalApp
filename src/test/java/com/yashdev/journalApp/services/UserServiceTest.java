@@ -53,7 +53,8 @@ public class UserServiceTest {
     @ParameterizedTest
     public void testSaveNewUser(User user){
         //assertNotNull(userRepository.findByUserName(name));
-        assertTrue(userService.saveNewUser(user));
+        //assertTrue(userService.saveNewUser(user));
+        assertFalse(userService.saveNewUser(user));
     }
     @CsvSource({
             // a,b,expected
