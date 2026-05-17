@@ -7,6 +7,7 @@ package com.yashdev.journalApp.services;
 import com.yashdev.journalApp.entity.JournalEntry;
 import com.yashdev.journalApp.entity.User;
 import com.yashdev.journalApp.repository.JournalEntryRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class JournalEntryService {
     @Autowired
     private JournalEntryRepository journalEntryRepository;
@@ -56,6 +58,7 @@ public class JournalEntryService {
                 journalEntryRepository.deleteById(id);
             }
         } catch (Exception e) {
+            log.error("Error ",e);
             throw new RuntimeException(e);
         }
         return removed;
