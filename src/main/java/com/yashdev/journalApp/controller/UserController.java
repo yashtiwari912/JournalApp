@@ -1,11 +1,13 @@
 package com.yashdev.journalApp.controller;
 
 
+import com.yashdev.journalApp.api.response.WeatherResponse;
 import com.yashdev.journalApp.entity.JournalEntry;
 import com.yashdev.journalApp.entity.User;
 import com.yashdev.journalApp.repository.UserRepository;
 import com.yashdev.journalApp.services.JournalEntryService;
 import com.yashdev.journalApp.services.UserService;
+import com.yashdev.journalApp.services.WeatherService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private WeatherService weatherService;
 
 //    @GetMapping
 //    public List<User> getAllUser(){
@@ -84,5 +89,16 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping
+    public ResponseEntity<?>greeting(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        WeatherResponse weatherResponse = weatherService.getWeather("bhopal");
+        String greeting = "";
+        if(weatherResponse != null){
+            Double tempInCelsius = weatherResponse.getMain().getFeelsLike() - 273.15;
+            greeting = ", weather feels like " + tempInCelsius;
+        }
+        return new ResponseEntity<>("Hii!! "+ authentication.getName()+ greeting  , HttpStatus.OK);
+    }
 
 }
