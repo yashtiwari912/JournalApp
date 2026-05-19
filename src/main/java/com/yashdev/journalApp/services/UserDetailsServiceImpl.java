@@ -7,8 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     // This class is an implementation of the UserDetailsService interface, which is a core interface in Spring Security. It is used to retrieve user-related data. The UserDetailsService interface has a single method, loadUserByUsername, which is used to look up a user by their username and return a UserDetails object that Spring Security can use for authentication and authorization.
 

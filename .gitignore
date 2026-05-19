@@ -42,3 +42,5 @@ application-prod.properties
 ### Spring Boot properties files ##
 src/main/resources/application-*.properties
 src/main/resources/application-*.yml
+
+logs
