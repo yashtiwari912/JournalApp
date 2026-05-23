@@ -1,6 +1,7 @@
 package com.yashdev.journalApp.services;
 
 import com.yashdev.journalApp.api.response.WeatherResponse;
+import com.yashdev.journalApp.cache.AppCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
@@ -17,15 +18,18 @@ public class WeatherService {
     //https://api.openweathermap.org/data/2.5/weather?q=${city.toLowerCase()}&appid=${apiKey}
 
 
-    @Value("${weather.api.url}")
-    private String apiUrl;
+//    @Value("${weather.api.url}")
+//    private String apiUrl;
+
+    @Autowired
+    private AppCache appCache;
 
     @Autowired
     private RestTemplate restTemplate;
 
     public WeatherResponse getWeather(String city){
 
-        String finalAPi = apiUrl +
+        String finalAPi = appCache.APP_CACHE.get(AppCache.keys.WEATHER_API.toString()) +
                 "?q=" + city.toLowerCase() +
                 "&appid=" + apikey;
 
