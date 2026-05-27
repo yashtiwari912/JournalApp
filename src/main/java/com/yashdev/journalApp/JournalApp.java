@@ -7,6 +7,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.MongoDatabaseFactory;
 import org.springframework.data.mongodb.MongoTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
@@ -14,6 +15,8 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableTransactionManagement//ye keval main class me lagana hota hai, isse hume transaction management ka support milta hai, jisse hum apne service layer me transactions ko manage kar sakte hain. Iska use karne se hum apne database operations ko atomic bana sakte hain,
 // yani ki agar koi operation fail ho jata hai to puri transaction rollback ho jayegi
+
+@EnableScheduling//ye annotation hume scheduling ka support provide karta hai, jisse hum apne application me scheduled tasks ko define kar sakte hain. Iska use karne se hum apne application me periodic tasks ko automate kar sakte hain, jaise ki data cleanup, email notifications, etc.
 public class JournalApp {
 
 	public static void main(String[] args) {

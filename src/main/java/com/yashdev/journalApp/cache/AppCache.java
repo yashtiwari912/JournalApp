@@ -22,6 +22,7 @@ public class AppCache {
     public Map<String,String>APP_CACHE;
 
     @PostConstruct//as soon as the bean is created and dependencies are injected, this method will be called automatically by the Spring framework.
+    //iska maatlab hai ki jab bhi AppCache class ka object create hoga, to init() method automatically call ho jayega, jisse hum apne cache ko initialize kar sakte hain.
     public void init(){
         APP_CACHE = new HashMap<>();
         List<ConfigJournalAppEntity> all = configJournalAppRepository.findAll();
