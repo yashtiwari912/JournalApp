@@ -1,6 +1,7 @@
 package com.yashdev.journalApp.entity;
 
 
+import com.yashdev.journalApp.enums.Sentiment;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NonNull;
@@ -28,6 +29,8 @@ public class JournalEntry {//it is basically a POJO class that represents the st
     private String content;
 
     private LocalDateTime date;
+
+    private Sentiment sentiment;
 
 
 }
