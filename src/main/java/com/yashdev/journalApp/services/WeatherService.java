@@ -27,18 +27,26 @@ public class WeatherService {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RedisService redisService;
+
     public WeatherResponse getWeather(String city){
+        WeatherResponse weatherResponse = redisService.get("weather_of_"+ city,WeatherResponse.class);
+        if(weatherResponse != null){
+            return weatherResponse;
+        }else{
+            String finalAPi = appCache.APP_CACHE.get(AppCache.keys.WEATHER_API.toString()) +
+                    "?q=" + city.toLowerCase() +
+                    "&appid=" + apikey;
+            //The process of converting the JSON response from the API into a Java object(POJO (Plain old Java Object)) is called deserialization.
+            ResponseEntity<WeatherResponse>response =  restTemplate.exchange(finalAPi, HttpMethod.GET,null, WeatherResponse.class);
+            WeatherResponse body =  response.getBody();
+            if(body != null){
+                redisService.set("weather_of_"+ city, body, 300L);
+            }
+            return body;
+        }
 
-        String finalAPi = appCache.APP_CACHE.get(AppCache.keys.WEATHER_API.toString()) +
-                "?q=" + city.toLowerCase() +
-                "&appid=" + apikey;
-
-        //The process of converting the JSON response from the API into a Java object(POJO (Plain old Java Object)) is called deserialization.
-        ResponseEntity<WeatherResponse>response =  restTemplate.exchange(finalAPi, HttpMethod.GET,null, WeatherResponse.class);
-
-        WeatherResponse body =  response.getBody();
-
-        return body;
     }
 
 }

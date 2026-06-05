@@ -9,13 +9,9 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class WeatherResponse {
-
     private ArrayList<Weather> weather;
-
     private Main main;
-
     private String name;
-
     @Getter
     @Setter
     public static class Main{
@@ -24,7 +20,6 @@ public class WeatherResponse {
         private double feelsLike;
         private int humidity;
     }
-
     @Getter
     @Setter
     public static class Weather{
