@@ -18,7 +18,7 @@ public class RedisService {
 
     public <T> T get(String key, Class<T> entityClass){
         try {
-            Object o = redisTemplate.opsForValue().get(key);
+            Object o = redisTemplate.opsForValue().get(key);//jsonString from redis
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(o.toString(),entityClass);
         }catch (Exception e){
